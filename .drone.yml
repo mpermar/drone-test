@@ -13,11 +13,6 @@ steps:
 
 - name: push-intermediate
   image: dtzar/helm-kubectl:3.8.1
-  environment:
-    github_username:
-      from_secret: github_username
-    github_password:
-      from_secret: github_password
   commands:
   - helm registry login -u ${github_username} ghcr.io -p ${github_password}
   - echo "Pushing Helm chart to oci://ghcr.io/mpermar"
