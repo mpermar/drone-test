@@ -21,6 +21,7 @@ steps:
   commands:
   - echo Pushing...
   - ls -la
+  - helm registry login -u ${github_username} ghcr.io -p ${github_password}
   
 - name: verify
   image: dtzar/helm-kubectl:3.8.1
