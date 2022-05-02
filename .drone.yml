@@ -13,8 +13,14 @@ steps:
 
 - name: push-intermediate
   image: dtzar/helm-kubectl:3.8.1
+  environment:
+    github_username:
+      from_secret: github_username
+    github_password:
+      from_secret: github_password
   commands:
-  - echo Packaging...
+  - echo Pushing...
+  - ls -la
   
 - name: verify
   image: dtzar/helm-kubectl:3.8.1
