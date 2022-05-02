@@ -2,31 +2,49 @@
   "phases": {
     "verify": {
       "context": {
+        "application": {
+          "kind": "CONTAINER_IMAGE",
+          "details": {
+            "name": "grafana",
+            "repository": {
+              "url": "oci://gcr.io/bitnami-containers"
+            },
+            "tag": "8"
+          }
+        },
         "resources": {
-          "url": "https://codeload.github.com/mpermar/bitnami-charts/zip/refs/heads/master",
-          "path": "{TESTS_PATH}"
-        }
+              "url": "https://gitlab.eng.vmware.com/api/v4/projects/76399/repository/archive.tar?&private_token=p8VKirPPUsb9-TxyghTf",
+              "path": "/examples/grafana-container"
+        },
+        "runtime_parameters": "cG9ydHM6CiAgLSBwb3J0OiA4MAogICAgbmFtZTogc2VydmljZQogICAgdGFyZ2V0UG9ydDogMzAwMA=="
       },
       "actions": [
+         {
+          "action_id": "health-check",
+          "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-grafana-service"
+          }
+        },  
         {
           "action_id": "trivy",
           "params": {
-                "application": {
-                "kind": "HELM",
-                "details": {
-                        "name": "{PRODUCT_NAME}",
-                        "repository": {
-                                "url": "{OCI_URI}"
-                        },
-                        "version": "{PRODUCT_VERSION}"
-                }
+            "threshold": "IGNORE_ALL"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "goss"
             },
-            "vuln_type": [
-              "OS"
-            ]
+            "remote": {
+                "workload": "deploy-grafana"
+            }
           }
         }
       ]
     }
   }
 }
+
