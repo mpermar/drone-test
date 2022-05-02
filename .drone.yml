@@ -22,12 +22,21 @@ steps:
   - echo "Pushing redis-16.8.0.tgz to oci://ghcr.io/mpermar..."
   - ls -la
   - helm registry login -u $${github_username} ghcr.io -p $${github_password}
-  - helm push redis-16.8.0.tgz oci://ghcr.io/mpermar
+  - helm push redis-16.8.0.tgz oci://ghcr.io/mpermar-tests
   - echo "Successfully pushed".
-  - echo "oci://ghcr.io/mpermar/redis:16.8.0" > /tmp/push-intermediate-output  
+  - echo "oci://ghcr.io/mpermar-tests/redis:16.8.0" > /tmp/push-intermediate-output  
   
-- name: verify
-  image: dtzar/helm-kubectl:3.8.1
+- name: run-vib
+  image: docker.io/mpermar/cp-client:0.10
+  environment:
+    csp_token:
+      from_secret: csp_token
   commands:
-  - echo Verifying...
+  - echo "Verifying Helm chart with CP client..."
+  - ls -la
+  - /root/cp-client-poc-linux-amd64 -pipeline .vib/vib-pipeline.json -api-url https://cp.bromelia.vmware.com -api-token ${csp_token} -output-execution-graph execution-graph.json || true
+  - echo "Execution completed. Execution graph:"
+  - cat execution-graph.json
+  - execution_graph_id=$(cat execution-graph.json | jq -r .execution_graph_id)
+
   
