@@ -22,7 +22,7 @@ steps:
   - echo "Pushing redis-16.8.0.tgz to oci://ghcr.io/mpermar..."
   - ls -la
   - helm registry login -u $${github_username} ghcr.io -p $${github_password}
-  - helm push redis-16.8.0.tgz to oci://ghcr.io/mpermar
+  - helm push redis-16.8.0.tgz oci://ghcr.io/mpermar
   - echo "Successfully pushed".
   - echo "oci://ghcr.io/mpermar/redis:16.8.0" > /tmp/push-intermediate-output  
   
