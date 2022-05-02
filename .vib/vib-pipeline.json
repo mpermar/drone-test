@@ -1,0 +1,32 @@
+{
+  "phases": {
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "https://codeload.github.com/mpermar/bitnami-charts/zip/refs/heads/master",
+          "path": "{TESTS_PATH}"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "trivy",
+          "params": {
+                "application": {
+                "kind": "HELM",
+                "details": {
+                        "name": "{PRODUCT_NAME}",
+                        "repository": {
+                                "url": "{OCI_URI}"
+                        },
+                        "version": "{PRODUCT_VERSION}"
+                }
+            },
+            "vuln_type": [
+              "OS"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
