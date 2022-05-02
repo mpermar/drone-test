@@ -19,9 +19,12 @@ steps:
     github_password:
       from_secret: github_password
   commands:
-  - echo Pushing...
+  - echo "Pushing redis-16.8.0.tgz to oci://ghcr.io/mpermar..."
   - ls -la
   - helm registry login -u $${github_username} ghcr.io -p $${github_password}
+  - helm push redis-16.8.0.tgz to oci://ghcr.io/mpermar
+  - echo "Successfully pushed".
+  - echo "oci://ghcr.io/mpermar/redis:16.8.0" > /tmp/push-intermediate-output  
   
 - name: verify
   image: dtzar/helm-kubectl:3.8.1
