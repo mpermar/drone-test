@@ -7,4 +7,26 @@ steps:
 - name: package
   image: dtzar/helm-kubectl:3.8.1
   commands:
-  - helm package
+  - helm version
+  - helm dependency update
+  - helm package .
+
+- name: push-intermediate
+  image: dtzar/helm-kubectl:3.8.1
+  environment:
+    github_username:
+      from_secret: github_username
+    github_password:
+      from_secret: github_password
+  commands:
+  - helm registry login -u ${github_username} ghcr.io -p ${github_password}
+  - echo "Pushing Helm chart to oci://ghcr.io/mpermar"
+  - helm push redis-16.8.0.tgz oci://ghcr.io/mpermar
+  - echo "Successfully pushed new version: oci://ghcr.io/mpermar/redis:16.8.0"
+  - echo "oci://ghcr.io/mpermar/redis:16.8.0" > /tmp/package-output
+  
+- name: verify
+  image: dtzar/helm-kubectl:3.8.1
+  commands:
+  - cat /tmp/package-output
+  
