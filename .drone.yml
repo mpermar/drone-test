@@ -1,0 +1,10 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: package
+  image: dtzar/helm-kubectl:3.8.1
+  commands:
+  - helm package
